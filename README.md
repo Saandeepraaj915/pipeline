@@ -1,1 +1,41 @@
 # pipeline
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clones the 'main' branch from your Git repository
+                git branch: 'main',
+                    credentialsId: 'your-git-credentials-id',
+                    url: 'https://github.com'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                // Replace with your build command (e.g., mvn clean install, npm run build)
+                sh 'make build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'make test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
